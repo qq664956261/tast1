@@ -1,0 +1,45 @@
+# config.yaml
+test:
+    trainer:
+        max_epochs: 1
+        accelerator: gpu
+        devices: [ 0 ]
+    data:
+        params:
+            data_type: hpatches
+            batch_size: 1
+            num_workers: 1
+            hpatches_params:
+                type: hpatches
+                root: /home/zc/code/tast_1/HPatch
+                alteration: i
+                image_size: 512
+                gray: False
+    model:
+        params:
+            model_type: Alike
+            task_type: repeatability
+            SuperPoint_params:
+                weight: /home/zc/code/tast_1/weights/superpoint_v1.pth
+            Alike_params:
+                weight: /home/zc/code/tast_1/weights/alike-t.pth
+                c1: 8
+                c2: 16
+                c3: 32
+                c4: 64
+                dim: 64
+                single_head: True
+            extractor_params:
+                nms_dist: 6
+                min_score: 0.0
+                top_k: 500
+                threshold: 0
+                border_dist: 8
+            repeatability_params:
+                save_path: /home/zc/code/tast_1/output/sp_i.png
+                output: /home/zc/code/tast_1/output/
+                th: 3
+                image:
+                    radius: 6
+                    max_error: 3
+                    color: 255,0,0

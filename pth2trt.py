@@ -2,6 +2,7 @@ import torch
 import os
 from models.SuperPoint import SuperPointNet # 你保存的模型定义模块
 import tensorrt as trt
+import openvino as ov
 def export_superpoint_to_trt(pth_path: str, trt_path: str, input_size=(1, 1, 400, 800)):
     """
     将 SuperPoint 模型从 PyTorch .pth 导出为 ONNX 格式
@@ -31,6 +32,14 @@ def export_superpoint_to_trt(pth_path: str, trt_path: str, input_size=(1, 1, 400
     )
 
     print("✅ ONNX 导出成功！")
+
+
+    ov_model = ov.convert_model("/home/zc/code/tast_1/weights/superpoint.onnx", example_input=dummy_input)
+    ov.save_model(ov_model, "/home/zc/code/tast_1/weights/superpoint.xml")
+    print("✅ openvino 导出成功！")
+
+
+
     # export to tensorRT
     TRT_LOGGER = trt.Logger(trt.Logger.WARNING)
     builder = trt.Builder(TRT_LOGGER)

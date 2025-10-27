@@ -3,7 +3,7 @@ import os
 from models.SuperPoint import SuperPointNet # 你保存的模型定义模块
 import tensorrt as trt
 import openvino as ov
-def export_superpoint_to_trt(pth_path: str, trt_path: str, input_size=(1, 1, 400, 800)):
+def export_superpoint_to_trt(pth_path: str, trt_path: str, input_size=(1, 1, 400, 640)):
     """
     将 SuperPoint 模型从 PyTorch .pth 导出为 ONNX 格式
 
@@ -19,7 +19,7 @@ def export_superpoint_to_trt(pth_path: str, trt_path: str, input_size=(1, 1, 400
     model.eval()
 
     dummy_input = torch.randn(*input_size)  # 通常是 1×1×240×320，灰度图
-    output_onnx_path = "/home/zc/code/tast_1/weights/superpoint.onnx"
+    output_onnx_path = "/home/zc/code/tast_1/weights/superpoint_640*400.onnx"
     print(f"🟢 导出模型到 ONNX: {output_onnx_path}")
     torch.onnx.export(
         model,
@@ -34,8 +34,8 @@ def export_superpoint_to_trt(pth_path: str, trt_path: str, input_size=(1, 1, 400
     print("✅ ONNX 导出成功！")
 
 
-    ov_model = ov.convert_model("/home/zc/code/tast_1/weights/superpoint.onnx", example_input=dummy_input)
-    ov.save_model(ov_model, "/home/zc/code/tast_1/weights/superpoint.xml")
+    ov_model = ov.convert_model("/home/zc/code/tast_1/weights/superpoint_640*400.onnx", example_input=dummy_input)
+    ov.save_model(ov_model, "/home/zc/code/tast_1/weights/superpoint_640*400.xml")
     print("✅ openvino 导出成功！")
 
 
@@ -63,5 +63,5 @@ def export_superpoint_to_trt(pth_path: str, trt_path: str, input_size=(1, 1, 400
 if __name__ == "__main__":
     # 你自己的路径
     pth_model_path = "/home/zc/code/tast_1/weights/superpoint_v1.pth"
-    output_trt_path = "/home/zc/code/tast_1/weights/superpoint.trt"
+    output_trt_path = "/home/zc/code/tast_1/weights/superpoint_640*400.trt"
     export_superpoint_to_trt(pth_model_path, output_trt_path)
